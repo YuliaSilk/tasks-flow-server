@@ -1,57 +1,40 @@
 import Joi from "joi";
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model, Document } from "mongoose";
 import { handleSaveError, preUpdate } from "./hooks";
 
-const boardScheme = new Schema(
+export interface IBoard extends Document {
+  title: string;
+  columns: mongoose.Types.ObjectId[];
+}
+
+const BoardSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
     },
 
-    background: {
-      type: String,
-    },
-
-    icon: {
-      type: String,
-      default: 'icon-Project',
-    },
-
-    columns: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "column",
-      },
-    ],
-
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-    },
+    columns: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Column",
+    }
+      ],
   },
 
   { versionKey: false, timestamps: false }
 );
-boardScheme.methods.handleSaveError = handleSaveError;
-boardScheme.methods.preUpdate = preUpdate;
-// boardScheme.post("save", handleSaveError);
-// boardScheme.pre("findOneAndUpdate", preUpdate);
-// boardScheme.post("findOneAndUpdate", handleSaveError);
+BoardSchema.methods.handleSaveError = handleSaveError;
+BoardSchema.methods.preUpdate = preUpdate;
+
 
 export const boardAddSchema = Joi.object({
   title: Joi.string().max(32).required(),
-  background: Joi.string(),
-  icon: Joi.string(),
 });
 
 export const boardEditSchema = Joi.object({
   title: Joi.string().max(32),
-  background: Joi.string(),
-  icon: Joi.string(),
 });
 
-const Board = model("board", boardScheme);
+const Board = model("board", BoardSchema);
 
-export default Board;
+export default mongoose.model<IBoard>('Board', BoardSchema);

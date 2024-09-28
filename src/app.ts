@@ -3,10 +3,14 @@ import logger from 'morgan';
 import cors from 'cors';
 import dotenv from "dotenv";
 import path from "path";
+import mongoose from 'mongoose';
+import { DB_HOST, PORT } from './config';
 
-import boardRouter from './routers/board-router';
-import cardRouter from './routers/card-router';
-import { DB_HOST, PORT } from '../config';
+
+import boardRouter from './routers/boardRouter';
+import columnRouter from './routers/columnRouter';
+import cardRouter from './routers/cardRouter';
+
 
 dotenv.config();
 
@@ -19,9 +23,15 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public"))); 
 
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({ message: 'Server is running' });
+});
 
 app.use('/api/boards', boardRouter);
-app.use('/api/cards', cardRouter);
+app.use('/api', columnRouter);
+app.use('/api/boards', cardRouter);
+
+
 
 app.use((req: Request, res: Response) => {
     res.status(404).json({ message: "Not found" });
@@ -30,29 +40,14 @@ app.use((req: Request, res: Response) => {
 app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(err.status || 500).json({ message: err.message });
 });
+mongoose.connect(DB_HOST)
+.then(() => {
+    app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
+})
+.catch((error) => {
+    console.log(error.message || "An error occurred while connecting to the database");
+    process.exit(1)
+})
 
-app.post('/api/cards', (req: Request, res: Response) => {
-  const { title, description } = req.body;
-
-  console.log(`Title: ${title}, Description: ${description}`);
-  
-  res.status(200).json({ message: 'Дані отримано успішно' });
-});
-
-app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
 export default app;
 
-// import express, { Request, Response } from 'express';
-
-// const app = express();
-// const port = 3000;
-
-// app.get('/', (req: Request, res: Response) => {
-//   res.send('Hello, TypeScript with Express!');
-// });
-
-// app.listen(port, () => {
-//   console.log(`Server is running at http://localhost:${port}`);
-// });
-
-// require('dotenv').config();
