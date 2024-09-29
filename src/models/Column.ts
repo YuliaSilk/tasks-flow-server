@@ -1,5 +1,5 @@
 import Joi from "joi";
-import mongoose, { Schema, model, Document } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { handleSaveError, preUpdate } from "./hooks";
 
 
