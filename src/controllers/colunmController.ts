@@ -30,14 +30,20 @@ export const getAllColumns = async (req: Request, res: Response): Promise<void> 
     res.json(columns);
 }
 
-export const getAllColumnById = async (req: Request, res: Response): Promise<void> => {
-    const { id } = req.params;
-    const column = await Column.findById(id)
+// export const getAllColumnById = async (req: Request, res: Response): Promise<void> => {
+//     const { id } = req.params;
+//     const column = await Column.findById(id)
     
-    if (!column) throw HttpError(404, "Column not found");
-    res.json(column);
-}
-
+//     if (!column) throw HttpError(404, "Column not found");
+//     res.json(column);
+// }
+export const getAllColumnsByBoardId = async (req: Request, res: Response): Promise<void> => {
+    const { boardID } = req.params;
+    const columns = await Column.find({ _id: boardID });
+  
+    if (!columns) throw HttpError(404, "Columns not found");
+    res.json(columns);
+  }
 export const getColumnById = async (req: Request, res: Response): Promise<void> => {
     const { boardID, columnID } = req.params;
   

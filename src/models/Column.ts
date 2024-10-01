@@ -45,3 +45,4 @@ export const Column = model<IColumn>("Column", ColumnSchema);
 export const columnAddSchema = Joi.object({
   name: Joi.string().max(32).required(),
 });
+
