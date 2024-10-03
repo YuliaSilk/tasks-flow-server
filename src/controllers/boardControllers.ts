@@ -35,6 +35,8 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
   newBoard.columns.push(todoColumn.id, inProgressColumn.id, doneColumn.id);
   await newBoard.save();
 
+
+  
   res.status(201).json(newBoard);
 };
 export const getAllBoards = async(req: Request, res: Response): Promise<void>  => {
@@ -45,9 +47,12 @@ export const getAllBoards = async(req: Request, res: Response): Promise<void>  =
 };
 
 export const getBoardById = async (req: Request, res: Response): Promise<void> => {
- const resalt = await Board.findById(req.params.id);
+ const resalt = await Board.findById(req.params.id).populate({path:"columns", select:"name",
+  populate: { path: "card", select: "title description", },
+});
 
  if (!resalt) throw new HttpError (404, "Board not found");
   res.json(resalt);
 }
+
 

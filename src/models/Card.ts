@@ -7,6 +7,7 @@ interface ICard extends Document {
   title: string;
   description: string;
   columnID: Schema.Types.ObjectId;
+  boardID: Schema.Types.ObjectId;
 }
 
 const CardSchema = new Schema<ICard>(
@@ -20,6 +21,10 @@ const CardSchema = new Schema<ICard>(
       required: true },
 
     columnID: { 
+      type: Schema.Types.ObjectId, 
+      required: true },
+
+    boardID: { 
       type: Schema.Types.ObjectId, 
       required: true },
   },

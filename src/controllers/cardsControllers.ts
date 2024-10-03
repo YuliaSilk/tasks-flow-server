@@ -43,15 +43,12 @@ export const getCards = async (req: Request, res: Response): Promise<void> => {
 }
 
 export const getCardById = async (req: Request, res: Response): Promise<void> => {
-  // const result = await Card.findById(req.params.id);
-  const { _id } = req.params;
-  const { title, description } = req.body;
-  const result = await Card.findById(_id, { title, description });
+  const result = await Card.findById(req.params.id);
   if (!result) 
   throw new HttpError(404, "Card not found");
-
   res.json(result);
 }
+
 
 export const updateCard = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;

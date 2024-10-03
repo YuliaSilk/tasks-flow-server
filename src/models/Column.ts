@@ -25,6 +25,7 @@ const ColumnSchema = new Schema<IColumn>(
       {
         type: Schema.Types.ObjectId,
         ref: "Card",
+        
       },],
 
 
