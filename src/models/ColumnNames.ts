@@ -1,6 +1,5 @@
 export enum ColumnNames {
-    TODO = " I want To Do",
+    TODO = "To Do",
     IN_PROGRESS = "In Progress",
     DONE = "Done",
-    // map = "map",
 }
