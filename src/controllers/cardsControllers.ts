@@ -24,15 +24,15 @@ export const createCard = async (req: Request, res: Response): Promise<void> => 
   const { boardId, columnId } = req.params;  
   const { title, description } = req.body;
 
-  const existingColumn = await Column.findOne({ _id: columnId, boardID: boardId });
+  const newColumn = await Column.findOne({ _id: columnId, boardID: boardId });
   
-  if (!existingColumn) 
+  if (!newColumn) 
   throw new HttpError(404, "Column not found");
 
-  const newCard = await Card.create({ title, description, columnID: columnId });
+  const newCard = await Card.create({ title, description, columnID: columnId, boardID: boardId });
 
-  existingColumn.card.push(newCard.id);
-  await existingColumn.save();
+  newColumn.card.push(newCard.id);
+  await newColumn.save();
 
   res.status(201).json(newCard);
 }
@@ -61,10 +61,9 @@ export const updateCard = async (req: Request, res: Response): Promise<void> => 
 
 export const deleteCard = async (req: Request, res: Response): Promise<void> => {
   const { id, columnId } = req.params;
-
   const result = await Card.findByIdAndDelete(id);
 
-  if (!deleteCard) 
+  if (!result) 
   throw new HttpError(404, "Card not found");
 
   await Column.findByIdAndUpdate(columnId, { $pull: { card: id } });
@@ -73,5 +72,37 @@ export const deleteCard = async (req: Request, res: Response): Promise<void> => 
 
 }
 
+export const dndMovement = async (req: Request, res: Response): Promise<void> => {
+  const { id, boardId } = req.params;
+  const { finishCardIndex, finishColumnID } = req.body;
+
+  console.log(`Moving card ${id} to column ${finishColumnID} at index ${finishCardIndex}`);
+
+  const card = await Card.findById(id);
+  if (!card) throw new HttpError(404, "You are trying to move a non-existing card");
+
+  const startColumnID = card.columnID;
+
+  await Column.findByIdAndUpdate(startColumnID, { $pull: { cards: id } });
+
+  const finishColumn = await Column.findById(finishColumnID);
+  if (!finishColumn) {
+      console.log(`Finish column not found: ${finishColumnID}`);
+      throw new HttpError(404, "Finish column not found");
+  }
+  console.log(`Finish column:`, finishColumn); 
+
+  card.columnID = finishColumnID;
+  await card.save();
+
+  if (!finishColumn.cards) {
+      finishColumn.cards = []; 
+  }
+
+  finishColumn.cards.splice(finishCardIndex, 0, card.id);
+  await finishColumn.save();
+
+  res.json({ card, finishCardIndex, startColumnID, finishColumnID });
+};
 
 

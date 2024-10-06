@@ -10,6 +10,7 @@ export interface ICard {
 export interface IColumn extends Document {
   name: string;
   card: ICard[];
+  cards: ICard[];
   boardID: Schema.Types.ObjectId;
 }
 
