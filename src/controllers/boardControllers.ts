@@ -53,6 +53,13 @@ export const getBoardById = async (req: Request, res: Response): Promise<void> =
 
  if (!resalt) throw new HttpError (404, "Board not found");
   res.json(resalt);
-}
+};
+
+export const deleteBoard = async (req: Request, res: Response): Promise<void> => {
+  const { id } = req.params;
+  const result = await Board.findByIdAndDelete(id);
+  if (!result) throw new HttpError(404, "Board not found");
+  res.json({ message: "Board deleted successfully" });
+};
 
 
