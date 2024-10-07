@@ -53,29 +53,3 @@ export const getColumnById = async (req: Request, res: Response): Promise<void> 
   };
 
 
-  // export const moveCardToColumn = async (req: Request, res: Response): Promise<void> => {
-  //   const { boardId, columnId, cardId } = req.params;
-  //   const { newColumnId } = req.body;
-  
-  //   const card = await Card.findById(cardId);
-  //   if (!card) throw HttpError(404, "Card not found");
-  
-  //   const currentColumn = await Column.findById(columnId);
-  //   if (!currentColumn) throw HttpError(404, "Current column not found");
-  
-  //   const newColumn = await Column.findById(newColumnId);
-  //   if (!newColumn) throw HttpError(404, "New column not found");
-  
-  //   // Видалити картку з поточної колонки
-  //   await Column.updateOne({ _id: columnId }, { $pull: { cards: cardId } });
-  
-  //   // Додати картку в нову колонку
-  //   newColumn.card.push(card._id);
-  //   await newColumn.save();
-  
-  //   // Оновити колонку картки
-  //   card.columnID = newColumnId;
-  //   await card.save();
-  
-  //   res.json({ message: 'Card moved successfully' });
-  // };

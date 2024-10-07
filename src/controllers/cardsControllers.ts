@@ -86,23 +86,41 @@ export const dndMovement = async (req: Request, res: Response): Promise<void> =>
   await Column.findByIdAndUpdate(startColumnID, { $pull: { cards: id } });
 
   const finishColumn = await Column.findById(finishColumnID);
-  if (!finishColumn) {
-      console.log(`Finish column not found: ${finishColumnID}`);
-      throw new HttpError(404, "Finish column not found");
-  }
-  console.log(`Finish column:`, finishColumn); 
+    if (!finishColumn) {
+    console.log(`Finish column not found: ${finishColumnID}`);
+    throw new HttpError(404, "Finish column not found");
+    }
+
+  const startColumn = await Column.findById(startColumnID);
+    if (!startColumn) {
+    console.log(`Start column not found: ${startColumnID}`);
+    throw new HttpError(404, "Start column not found");
+    }
+
+    if (startColumnID !== finishColumnID) {
+    await Column.findByIdAndUpdate(startColumnID, { $pull: { cards: card._id  } });
+    }
+
+    if (startColumnID === finishColumnID) {
+      console.log('Moving card within the same column');
+
+      finishColumn.cards = finishColumn.cards.filter(c => c.toString() !== card.id.toString());
+      finishColumn.cards.splice(finishCardIndex, 0, card.id);
+
+      await finishColumn.save();
+      res.json({ card, finishCardIndex, startColumnID, finishColumnID });
+    return 
+    }
+
+    if (!finishColumn.cards) {
+       finishColumn.cards = [];
+    }
+
+  finishColumn.cards.splice(finishCardIndex, 0, card );
+  await finishColumn.save();
 
   card.columnID = finishColumnID;
   await card.save();
 
-  if (!finishColumn.cards) {
-      finishColumn.cards = []; 
-  }
-
-  finishColumn.cards.splice(finishCardIndex, 0, card.id);
-  await finishColumn.save();
-
   res.json({ card, finishCardIndex, startColumnID, finishColumnID });
 };
-
-

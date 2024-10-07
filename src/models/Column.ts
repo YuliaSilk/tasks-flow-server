@@ -1,12 +1,9 @@
 import Joi from "joi";
 import { Schema, model, Document } from "mongoose";
 import { handleSaveError, preUpdate } from "./hooks";
+import { ICard } from "./Card";
 
 
-export interface ICard {
-  title: string;
-  description: string;
-}
 export interface IColumn extends Document {
   name: string;
   card: ICard[];

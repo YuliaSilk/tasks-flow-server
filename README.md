@@ -46,6 +46,7 @@ The server will be running on the port specified in the .env file.
 •	GET /api/boards/:boardId/columns/:columnId/cards/:id: Get a card by ID
 •	PUT /api/boards/:boardId/columns/:columnId/cards/:id: Update a card by ID
 •	DELETE /api/boards/:boardId/columns/:columnId/cards/:id: Delete a card by ID
+•	PATCH api/:boardId/columns/:newColumnId/cards/dnd/:id: remove a card to another colum
 
 ### Example Request
 curl -X GET http://localhost:3000/api/data

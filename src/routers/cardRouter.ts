@@ -11,7 +11,6 @@ cardRouter.get('/:boardId/columns/:columnId/cards/:id', isValidateId, getCardByI
 cardRouter.put('/:boardId/columns/:columnId/cards/:id', isValidateId, isEmptyBody, updateCard);
 cardRouter.delete('/:boardId/columns/:columnId/cards/:id', isValidateId, deleteCard);
 
-// cardRouter.patch('/:boardId/columns/:newColumnId/cards/:id/change', isValidateId, isEmptyBody, changeColumn);
 cardRouter.patch('/:boardId/columns/:newColumnId/cards/dnd/:id', isValidateId, isEmptyBody, dndMovement);
 
 export default cardRouter;

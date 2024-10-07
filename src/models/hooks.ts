@@ -1,4 +1,4 @@
-import { CallbackError, Document } from "mongoose";
+import mongoose, { CallbackError, Document,  } from "mongoose";
 import { NextFunction } from "express";
 
 export const handleSaveError = (error: CallbackError, _: Document, next: NextFunction) => {
@@ -11,7 +11,9 @@ export const handleSaveError = (error: CallbackError, _: Document, next: NextFun
 };
 
 export const preUpdate = function (this: any, next: NextFunction) {
-    this.options.new = true;
-    this.options.runValidators = true;
+    if (this instanceof mongoose.Model) {
+        this.options.new = true;
+        this.options.runValidators = true;
+    }
     next();
 };
