@@ -8,7 +8,7 @@ export interface ICard extends Document {
   description: string;
   columnID: Schema.Types.ObjectId;
   boardID: Schema.Types.ObjectId;
-  _id: Schema.Types.ObjectId; 
+  // _id: Schema.Types.ObjectId; 
   handleSaveError: (error: any) => void; 
   preUpdate: (next: any) => void; 
 }
@@ -31,10 +31,10 @@ const CardSchema = new Schema<ICard>(
       type: Schema.Types.ObjectId, 
       required: true },
       
-      _id: {
-        type: Schema.Types.ObjectId,
-        ref: "Card",
-      }
+      // _id: {
+      //   type: Schema.Types.ObjectId,
+      //   ref: "Card",
+      // }
   },
 
   { versionKey: false, timestamps: true }
