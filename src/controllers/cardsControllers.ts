@@ -83,44 +83,66 @@ export const dndMovement = async (req: Request, res: Response): Promise<void> =>
 
   const startColumnID = card.columnID;
 
+// const startColumn = await Column.findById(startColumnID);
+// const startCardIndex = startColumn.cards.indexOf(card._id);
+
+// if (startCardIndex > -1) {
+//     // Видаляємо картку з цього індексу
+//     startColumn.cards.splice(startCardIndex, 1);
+//     await startColumn.save();
+// }
   await Column.findByIdAndUpdate(startColumnID, { $pull: { cards: id } });
 
   const finishColumn = await Column.findById(finishColumnID);
-    if (!finishColumn) {
+if (!finishColumn) {
     console.log(`Finish column not found: ${finishColumnID}`);
     throw new HttpError(404, "Finish column not found");
-    }
+}
 
-  const startColumn = await Column.findById(startColumnID);
-    if (!startColumn) {
+const startColumn = await Column.findById(startColumnID);
+if (!startColumn) {
     console.log(`Start column not found: ${startColumnID}`);
     throw new HttpError(404, "Start column not found");
-    }
+}
 
-    if (startColumnID !== finishColumnID) {
+if (startColumnID !== finishColumnID) {
     await Column.findByIdAndUpdate(startColumnID, { $pull: { cards: card._id  } });
-    }
+}
 
-    if (startColumnID === finishColumnID) {
-      console.log('Moving card within the same column');
+if (startColumnID === finishColumnID) {
+    console.log('Moving card within the same column');
 
-      finishColumn.cards = finishColumn.cards.filter(c => c.toString() !== card.id.toString());
-      finishColumn.cards.splice(finishCardIndex, 0, card.id);
+    finishColumn.cards = finishColumn.cards.filter(c => c.toString() !== card.id.toString());
+    finishColumn.cards.splice(finishCardIndex, 0, card.id);
 
-      await finishColumn.save();
-      res.json({ card, finishCardIndex, startColumnID, finishColumnID });
+    await finishColumn.save();
+    res.json({ card, finishCardIndex, startColumnID, finishColumnID });
     return 
-    }
+}
 
-    if (!finishColumn.cards) {
-       finishColumn.cards = [];
-    }
+if (!finishColumn.cards) {
+    finishColumn.cards = [];
+}
 
-  finishColumn.cards.splice(finishCardIndex, 0, card );
-  await finishColumn.save();
+finishColumn.cards.splice(finishCardIndex, 0, card );
+await finishColumn.save();
 
-  card.columnID = finishColumnID;
-  await card.save();
+card.boardID = card.boardID || finishColumn.boardID;  // Переконайся, що boardID не загубилося
+card.columnID = finishColumnID;
+await card.save();
 
-  res.json({ card, finishCardIndex, startColumnID, finishColumnID });
+res.json({ card, finishCardIndex, startColumnID, finishColumnID });
 };
+
+
+
+
+// Оновлюємо columnID картки
+// card.columnID = finishColumnID;
+// await card.save();
+
+// Додаємо картку на нову позицію в фінішній колонці
+// finishColumn.cards.splice(finishCardIndex, 0, card._id); // Додаємо картку за індексом
+// await finishColumn.save();
+
+// res.json({ card, finishCardIndex, startColumnID, finishColumnID });

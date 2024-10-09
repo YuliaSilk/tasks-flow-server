@@ -5,6 +5,11 @@ import { handleSaveError, preUpdate } from "./hooks";
 export interface IBoard extends Document {
   title: string;
   columns: mongoose.Types.ObjectId[];
+  unique: true; 
+  trim: true;
+  _id: mongoose.Types.ObjectId;
+  handleSaveError(error: any): void;
+  preUpdate(next: any): void;
 }
 
 const BoardSchema = new Schema(

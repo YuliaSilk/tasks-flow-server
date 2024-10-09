@@ -30,6 +30,7 @@ const CardSchema = new Schema<ICard>(
     boardID: { 
       type: Schema.Types.ObjectId, 
       required: true },
+      
       _id: {
         type: Schema.Types.ObjectId,
         ref: "Card",

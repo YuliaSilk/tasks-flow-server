@@ -2,7 +2,6 @@ import { Request, Response } from 'express';
 import { Column } from '../models/Column';
 import Board, { IBoard } from '../models/Board';
 import HttpError from 'http-errors';
-import { Card } from '../models/Card';
 
 export const createColumn = async (req: Request, res: Response): Promise<void> => {
     const { id: boardID } = req.params;

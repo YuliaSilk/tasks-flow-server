@@ -13,7 +13,6 @@ export interface IColumn extends Document {
 
 const ColumnSchema = new Schema<IColumn>(
   {
-  
     name: {
       type: String,
       required: [true, "Set name for column"],
@@ -25,7 +24,6 @@ const ColumnSchema = new Schema<IColumn>(
         ref: "Card",
         
       },],
-
 
     boardID: {
       type: Schema.Types.ObjectId,

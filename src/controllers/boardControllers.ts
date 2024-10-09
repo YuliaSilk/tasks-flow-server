@@ -24,6 +24,11 @@ interface Board {
 }
 export const createBoard = async (req: Request, res: Response): Promise<void> => {
   const { title } = req.body;
+  const existingBoard = await Board.findOne({ title });
+  if (existingBoard) {
+    res.status(400).json({ message: 'Board with this name already exists' });
+    return 
+  }
   const newBoard =  await Board.create({
     title
   });
@@ -34,11 +39,10 @@ export const createBoard = async (req: Request, res: Response): Promise<void> =>
 
   newBoard.columns.push(todoColumn.id, inProgressColumn.id, doneColumn.id);
   await newBoard.save();
-
-
-  
   res.status(201).json(newBoard);
 };
+
+
 export const getAllBoards = async(req: Request, res: Response): Promise<void>  => {
   const resalt =  await Board.find().populate({path:"columns", select:"name",
     populate: { path: "card", select: "title description", },
