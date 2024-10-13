@@ -2,12 +2,12 @@
   "name": "tasks-flow-server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/app.ts",
     "build": "tsc",
-    "serve": "node dist/index.js"
+    "serve": "node dist/app.js"
   },
   "keywords": [],
   "author": "",
