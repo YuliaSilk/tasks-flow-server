@@ -11,6 +11,6 @@ const boardRouter = express_1.default.Router();
 boardRouter.get('/', boardControllers_1.getAllBoards);
 boardRouter.get('/:id', midelwares_1.isValidateId, boardControllers_1.getBoardById);
 boardRouter.post('/', midelwares_1.isEmptyBody, boardControllers_1.createBoard);
-// boardRouter.delete('/:id', isValidateId, deleteBoard);  
+boardRouter.delete('/:id', midelwares_1.isValidateId, boardControllers_1.deleteBoard);
 boardRouter.use('/:id', columnRouter_1.default);
 exports.default = boardRouter;

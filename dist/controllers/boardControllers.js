@@ -12,13 +12,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getBoardById = exports.getAllBoards = exports.createBoard = void 0;
+exports.deleteBoard = exports.getBoardById = exports.getAllBoards = exports.createBoard = void 0;
 const Board_1 = __importDefault(require("../models/Board"));
 const Column_1 = require("../models/Column");
 const ColumnNames_1 = require("../models/ColumnNames");
 const helpers_1 = require("../helpers");
 const createBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { title } = req.body;
+    const existingBoard = yield Board_1.default.findOne({ title });
+    if (existingBoard) {
+        res.status(400).json({ message: 'Board with this name already exists' });
+        return;
+    }
     const newBoard = yield Board_1.default.create({
         title
     });
@@ -46,3 +51,11 @@ const getBoardById = (req, res) => __awaiter(void 0, void 0, void 0, function* (
     res.json(resalt);
 });
 exports.getBoardById = getBoardById;
+const deleteBoard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const result = yield Board_1.default.findByIdAndDelete(id);
+    if (!result)
+        throw new helpers_1.HttpError(404, "Board not found");
+    res.json({ message: "Board deleted successfully" });
+});
+exports.deleteBoard = deleteBoard;

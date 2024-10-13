@@ -47,10 +47,10 @@ const CardSchema = new mongoose_1.Schema({
         type: mongoose_1.Schema.Types.ObjectId,
         required: true
     },
-    _id: {
-        type: mongoose_1.Schema.Types.ObjectId,
-        ref: "Card",
-    }
+    // _id: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "Card",
+    // }
 }, { versionKey: false, timestamps: true });
 // CardSchema.methods.handleSaveError = handleSaveError;
 // CardSchema.methods.preUpdate = preUpdate;
