@@ -1,5 +1,7 @@
 node_modules/
 
+dist/
+
 .idea
 .vscode
 /src/config.ts
@@ -19,3 +21,4 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+

@@ -1,7 +1,12 @@
 import Joi from "joi";
 import mongoose, { Schema, model, Document } from "mongoose";
 import { handleSaveError, preUpdate } from "./hooks";
-
+import { Column } from "./Column";
+export interface Board {
+  _id: mongoose.Types.ObjectId;
+  title: string;
+  columns: Column[];
+}
 export interface IBoard extends Document {
   title: string;
   columns: mongoose.Types.ObjectId[];

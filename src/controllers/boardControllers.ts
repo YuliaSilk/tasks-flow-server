@@ -5,23 +5,7 @@ import { ColumnNames } from '../models/ColumnNames';
 import mongoose from 'mongoose';
 import { HttpError } from '../helpers';
 
-interface Card {
-  _id: mongoose.Types.ObjectId;
-  title: string;
-  description: string;
-}
 
-interface Column {
-  _id: mongoose.Types.ObjectId;
-  name: string;
-  cards: Card[];
-}
-
-interface Board {
-  _id: mongoose.Types.ObjectId;
-  title: string;
-  columns: Column[];
-}
 export const createBoard = async (req: Request, res: Response): Promise<void> => {
   const { title } = req.body;
   const existingBoard = await Board.findOne({ title });
